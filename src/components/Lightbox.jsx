@@ -3,6 +3,7 @@ import { CloseIcon, MinusIcon, PlusIcon } from './Icons.jsx'
 import WorkVisual from './WorkVisual.jsx'
 
 export default function Lightbox({ work, onClose }) {
+  const title = work?.title || work?.label || '作品'
   const [zoom, setZoom] = useState(1)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
   const [dragStart, setDragStart] = useState(null)
@@ -37,9 +38,9 @@ export default function Lightbox({ work, onClose }) {
   }
 
   return (
-    <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${work.label} 图片预览`} data-no-page-scroll onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
+    <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${title} 图片预览`} data-no-page-scroll onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
       <div className="lightbox-toolbar">
-        <span>{work.label}</span>
+        <span>{title}</span>
         <div className="lightbox-actions">
           <button type="button" onClick={() => changeZoom(zoom - 0.25)} aria-label="缩小图片" disabled={zoom <= 1}><MinusIcon /></button>
           <span aria-live="polite">{Math.round(zoom * 100)}%</span>
@@ -63,7 +64,7 @@ export default function Lightbox({ work, onClose }) {
           onPointerUp={() => setDragStart(null)}
           onPointerCancel={() => setDragStart(null)}
         >
-          {work.image ? <img className="lightbox-real-image" src={work.image} alt={work.label} /> : <WorkVisual work={work} />}
+          {work.image ? <img className="lightbox-real-image" src={work.image} alt={title} /> : <WorkVisual work={work} />}
         </div>
       </div>
       <p className="lightbox-hint">拖动查看放大区域 · ESC 关闭</p>
